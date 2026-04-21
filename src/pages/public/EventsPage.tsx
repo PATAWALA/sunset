@@ -1,4 +1,4 @@
-
+import { motion } from 'framer-motion'  // ← CORRIGÉ ICI
 import { Calendar, Clock, MapPin, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -42,7 +42,6 @@ const EventsPage = () => {
   return (
     <div className="min-h-screen night-gradient pt-24">
       <div className="container mx-auto section-padding">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -56,7 +55,6 @@ const EventsPage = () => {
           </p>
         </motion.div>
 
-        {/* Search Bar */}
         <div className="max-w-md mx-auto mb-12">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -70,7 +68,6 @@ const EventsPage = () => {
           </div>
         </div>
 
-        {/* Events Grid */}
         {isLoading ? (
           <div className="flex justify-center py-20">
             <div className="w-12 h-12 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin" />
