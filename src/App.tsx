@@ -38,7 +38,7 @@ function App() {
         </Route>
 
         {/* URL SECRÈTE pour la connexion admin */}
-        <Route path="/admin-secret-portal" element={<SecretAdminLogin />} />
+        <Route path="/portal" element={<SecretAdminLogin />} />
 
         {/* Routes admin PROTÉGÉES */}
         <Route path="/admin" element={<ProtectedAdminRoute />}>
