@@ -6,5 +6,6 @@
   "env": {
     "NODE_VERSION": "20",
     "VITE_DISABLE_ROLldown": "true"
-  }
+  },
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
