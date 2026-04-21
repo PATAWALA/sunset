@@ -2,5 +2,9 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "vite",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "env": {
+    "NODE_VERSION": "20",
+    "VITE_DISABLE_ROLldown": "true"
+  }
 }
