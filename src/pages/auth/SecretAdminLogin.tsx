@@ -15,38 +15,51 @@ const SecretAdminLogin = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  e.preventDefault()
+  setIsLoading(true)
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
 
-      if (error) throw error
-
-      // Vérifier si l'utilisateur est bien un admin
-      const { data: adminData, error: adminError } = await supabase
-        .from('admins')
-        .select('*')
-        .eq('id', data.user.id)
-        .single()
-
-      if (adminError || !adminData) {
-        await supabase.auth.signOut()
-        throw new Error('Accès non autorisé')
-      }
-
-      toast.success('Bienvenue dans l\'espace privé 🌅')
-      navigate('/admin/dashboard')
-    } catch (error: any) {
-      toast.error('Accès refusé')
-    } finally {
+    if (error) {
+      console.error('Erreur login:', error.message)
+      toast.error('Email ou mot de passe incorrect')
       setIsLoading(false)
+      return
     }
-  }
 
+    console.log('Utilisateur connecté:', data.user)
+
+    // Vérifier si admin
+    const { data: adminData, error: adminError } = await supabase
+      .from('admins')
+      .select('*')
+      .eq('id', data.user.id)
+      .single()
+
+    console.log('Admin data:', adminData)
+    console.log('Admin error:', adminError)
+
+    if (adminError || !adminData) {
+      console.error('Pas admin:', adminError)
+      await supabase.auth.signOut()
+      toast.error('Accès refusé - Vous n\'êtes pas administrateur')
+      setIsLoading(false)
+      return
+    }
+
+    toast.success('Bienvenue 🌅')
+    navigate('/admin/dashboard')
+  } catch (error: any) {
+    console.error('Erreur:', error)
+    toast.error('Erreur: ' + error.message)
+  } finally {
+    setIsLoading(false)
+  }
+}
   return (
     <div className="min-h-screen night-gradient flex items-center justify-center p-4">
       {/* Effet de confidentialité */}
