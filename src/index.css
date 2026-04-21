@@ -4,54 +4,26 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 38 92% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 15 100% 60%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 347 70% 50%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 38 92% 50%;
-    --radius: 0.75rem;
-    
-    /* Couleurs Sunset personnalisées */
-    --sunset-gold: 38 92% 50%;
-    --sunset-orange: 15 100% 60%;
-    --sunset-crimson: 347 70% 50%;
-    --sunset-purple: 315 40% 30%;
-  }
- 
-  .dark {
-    --background: 240 10% 3.9%;
+    --background: 240 15% 4%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 240 15% 8%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 240 15% 8%;
     --popover-foreground: 0 0% 98%;
-    --primary: 38 92% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 38 92% 55%;
+    --primary-foreground: 240 15% 4%;
     --secondary: 15 100% 60%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 347 70% 50%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
+    --secondary-foreground: 240 15% 4%;
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 347 70% 55%;
+    --accent-foreground: 240 15% 4%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 38 92% 50%;
+    --border: 240 10% 20%;
+    --input: 240 10% 20%;
+    --ring: 38 92% 55%;
+    --radius: 1rem;
   }
 }
 
@@ -60,7 +32,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-night text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -72,27 +44,40 @@
 }
 
 @layer components {
+  /* Dégradés */
   .sunset-gradient {
     @apply bg-gradient-to-r from-[#F5A623] via-[#FF6B35] to-[#D9385E];
   }
   
   .night-gradient {
-    @apply bg-gradient-to-b from-[#1A1A2E] to-[#0F0F1A];
+    @apply bg-gradient-to-b from-[#0F0F1A] to-[#1A1A2E];
   }
   
+  /* Effet glass UNIFORME pour toutes les cartes */
   .glass-effect {
-    @apply bg-black/30 backdrop-blur-md border border-white/20;
+    @apply bg-[#1A1A2E]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
   }
   
+  .glass-card {
+    @apply bg-[#1A1A2E]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl hover:border-[#F5A623]/30 transition-all duration-300;
+  }
+  
+  /* Padding des sections */
   .section-padding {
-    @apply px-4 md:px-8 lg:px-16 py-12 md:py-20;
+    @apply px-4 md:px-8 lg:px-16 py-16 md:py-24;
   }
   
+  /* Boutons */
   .btn-primary {
-    @apply bg-gradient-to-r from-[#F5A623] to-[#FF6B35] text-white font-bold py-3 px-6 rounded-full hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl inline-flex items-center justify-center;
+    @apply bg-gradient-to-r from-[#F5A623] to-[#FF6B35] text-white font-bold py-3 px-6 rounded-full hover:shadow-lg hover:shadow-[#F5A623]/30 transition-all duration-300 inline-flex items-center justify-center gap-2;
   }
   
   .btn-outline {
-    @apply border-2 border-white text-white font-bold py-3 px-6 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300 inline-flex items-center justify-center;
+    @apply border border-white/30 text-white font-bold py-3 px-6 rounded-full hover:bg-white/10 hover:border-[#F5A623] transition-all duration-300 inline-flex items-center justify-center gap-2;
+  }
+  
+  /* Badges */
+  .badge-featured {
+    @apply absolute top-4 left-4 px-3 py-1 bg-gradient-to-r from-[#F5A623] to-[#FF6B35] text-white text-xs font-bold rounded-full shadow-lg;
   }
 }

@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Menu, X, MapPin, Phone, Clock } from 'lucide-react'
-import {FaInstagram,FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaFacebook } from "react-icons/fa"
 import { useState } from 'react'
 
 const PublicLayout = () => {
@@ -18,9 +18,9 @@ const PublicLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 glass-effect">
-        {/* Top bar avec infos */}
-        <div className="bg-sunset-600 text-white py-2 px-4 text-sm hidden md:block">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0F0F1A]/95 backdrop-blur-xl border-b border-white/10">
+        {/* Top bar */}
+        <div className="bg-gradient-to-r from-[#F5A623] to-[#D9385E] text-white py-2 px-4 text-sm hidden md:block">
           <div className="container mx-auto flex justify-between">
             <div className="flex gap-6">
               <span className="flex items-center gap-2">
@@ -31,7 +31,7 @@ const PublicLayout = () => {
               </span>
             </div>
             <div className="flex gap-4">
-              <a href="tel:+22600000000" className="flex items-center gap-2 hover:text-sunset-200">
+              <a href="tel:+22600000000" className="flex items-center gap-2 hover:text-white/80">
                 <Phone size={16} /> +226 00 00 00 00
               </a>
             </div>
@@ -67,17 +67,14 @@ const PublicLayout = () => {
                   to={link.path}
                   className={`font-medium transition-colors ${
                     location.pathname === link.path
-                      ? 'text-sunset-500'
+                      ? 'text-[#F5A623]'
                       : 'text-gray-300 hover:text-white'
                   }`}
                 >
                   {link.name}
                 </Link>
               ))}
-              <Link
-                to="/events"
-                className="btn-primary text-sm px-6 py-2"
-              >
+              <Link to="/events" className="btn-primary text-sm px-6 py-2">
                 Réserver une table
               </Link>
             </div>
@@ -106,7 +103,7 @@ const PublicLayout = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className={`block py-2 font-medium ${
                     location.pathname === link.path
-                      ? 'text-sunset-500'
+                      ? 'text-[#F5A623]'
                       : 'text-gray-300 hover:text-white'
                   }`}
                 >
@@ -126,57 +123,53 @@ const PublicLayout = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pt-24 md:pt-32">
+      <main className="flex-1 pt-28 md:pt-32">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="night-gradient text-white">
+      <footer className="bg-[#0F0F1A] border-t border-white/10">
         <div className="container mx-auto section-padding">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Colonne 1 - Logo */}
             <div>
               <Link to="/" className="flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 rounded-full sunset-gradient flex items-center justify-center">
                   <span className="text-white text-xl">🌅</span>
                 </div>
-                <h2 className="text-xl font-display font-bold">Sunset</h2>
+                <h2 className="text-xl font-display font-bold text-white">Sunset</h2>
               </Link>
               <p className="text-gray-400 text-sm">
                 Une sensation émouvante et émerveilleuse à Ouagadougou.
-                Venez vivre l'expérience Sunset.
               </p>
               <div className="flex gap-4 mt-4">
-                <a href="#" className="text-gray-400 hover:text-sunset-500 transition">
+                <a href="#" className="text-gray-400 hover:text-[#F5A623] transition">
                   <FaFacebook size={20} />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-sunset-500 transition">
+                <a href="#" className="text-gray-400 hover:text-[#F5A623] transition">
                   <FaInstagram size={20} />
                 </a>
               </div>
             </div>
 
-            {/* Colonne 2 - Liens rapides */}
             <div>
-              <h3 className="font-bold mb-4">Liens rapides</h3>
+              <h3 className="font-bold text-white mb-4">Liens rapides</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/events" className="hover:text-sunset-500">Événements</Link></li>
-                <li><Link to="/gallery" className="hover:text-sunset-500">Galerie</Link></li>
-                <li><Link to="/our-story" className="hover:text-sunset-500">Notre Histoire</Link></li>
+                <li><Link to="/events" className="hover:text-[#F5A623]">Événements</Link></li>
+                <li><Link to="/gallery" className="hover:text-[#F5A623]">Galerie</Link></li>
+                <li><Link to="/our-story" className="hover:text-[#F5A623]">Notre Histoire</Link></li>
               </ul>
             </div>
 
-            {/* Colonne 3 - Contact */}
             <div>
-              <h3 className="font-bold mb-4">Contact</h3>
+              <h3 className="font-bold text-white mb-4">Contact</h3>
               <ul className="space-y-2 text-gray-400">
                 <li className="flex items-start gap-2">
-                  <MapPin size={16} className="mt-1 flex-shrink-0" />
-                  <span>Ouagadougou, Quartier Ouaga 2000</span>
+                  <MapPin size={16} className="mt-1" />
+                  <span>Quartier Ouaga 2000, Ouagadougou</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Phone size={16} />
-                  <a href="tel:+22600000000" className="hover:text-sunset-500">+226 00 00 00 00</a>
+                  <a href="tel:+22600000000" className="hover:text-[#F5A623]">+226 00 00 00 00</a>
                 </li>
                 <li className="flex items-center gap-2">
                   <Clock size={16} />
@@ -185,9 +178,8 @@ const PublicLayout = () => {
               </ul>
             </div>
 
-            {/* Colonne 4 - Newsletter */}
             <div>
-              <h3 className="font-bold mb-4">Newsletter</h3>
+              <h3 className="font-bold text-white mb-4">Newsletter</h3>
               <p className="text-gray-400 text-sm mb-4">
                 Recevez nos événements en avant-première
               </p>
@@ -195,9 +187,9 @@ const PublicLayout = () => {
                 <input
                   type="email"
                   placeholder="Votre email"
-                  className="flex-1 px-4 py-2 rounded-l-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-sunset-500"
+                  className="flex-1 px-4 py-2 rounded-l-full bg-[#1A1A2E] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#F5A623]"
                 />
-                <button className="bg-sunset-500 hover:bg-sunset-600 px-6 py-2 rounded-r-full font-medium transition">
+                <button className="bg-[#F5A623] hover:bg-[#FF6B35] px-6 py-2 rounded-r-full font-medium transition">
                   OK
                 </button>
               </form>

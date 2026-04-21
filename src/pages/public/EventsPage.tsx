@@ -1,12 +1,10 @@
-import { motion } from 'framer-motion'  // ← CORRIGÉ ICI
-import { Calendar, Clock, MapPin, Search } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Calendar, Clock, MapPin, Search, ArrowRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchEvents } from '../../utils/supabase-helpers'
 import type { Event } from '../../types/database'
-import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
-import { Card, CardContent, CardFooter, CardHeader } from '../../components/ui/card'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
@@ -42,6 +40,7 @@ const EventsPage = () => {
   return (
     <div className="min-h-screen night-gradient pt-24">
       <div className="container mx-auto section-padding">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -55,6 +54,7 @@ const EventsPage = () => {
           </p>
         </motion.div>
 
+        {/* Search Bar */}
         <div className="max-w-md mx-auto mb-12">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -63,14 +63,15 @@ const EventsPage = () => {
               placeholder="Rechercher un événement..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+              className="pl-10 bg-[#1A1A2E] border-white/10 text-white placeholder:text-gray-500 rounded-full py-6"
             />
           </div>
         </div>
 
+        {/* Events Grid */}
         {isLoading ? (
           <div className="flex justify-center py-20">
-            <div className="w-12 h-12 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-[#F5A623] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : filteredEvents.length === 0 ? (
           <div className="text-center py-20">
@@ -87,53 +88,55 @@ const EventsPage = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="glass-effect border-white/10 overflow-hidden group hover:border-sunset-500/50 transition-all h-full flex flex-col">
-                  <div className="relative h-56 overflow-hidden">
+                {/* CARTE UNIFORME - MÊME STYLE QUE HOMEPAGE */}
+                <div className="glass-card overflow-hidden group cursor-pointer h-full flex flex-col">
+                  <div className="relative h-48 overflow-hidden">
                     <img 
                       src={event.cover_image_url || 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600'} 
                       alt={event.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F1A] to-transparent" />
                     {event.is_featured && (
-                      <span className="absolute top-4 left-4 px-3 py-1 bg-sunset-500 text-white text-xs font-bold rounded-full">
+                      <span className="badge-featured">
                         🔥 À la une
                       </span>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-night via-transparent to-transparent" />
                   </div>
                   
-                  <CardHeader>
-                    <h3 className="text-2xl font-bold text-white">{event.title}</h3>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-3 flex-1">
-                    <div className="flex items-center gap-2 text-sunset-400">
-                      <Calendar size={16} />
-                      <span>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-center gap-4 text-sm text-[#F5A623] mb-3">
+                      <span className="flex items-center gap-1">
+                        <Calendar size={14} />
                         {format(new Date(event.event_date), 'EEEE d MMMM yyyy', { locale: fr })}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <Clock size={16} />
-                      <span>{event.start_time.slice(0, 5)} - {event.end_time?.slice(0, 5) || '02:00'}</span>
+                    
+                    <div className="flex items-center gap-4 text-sm text-gray-400 mb-2">
+                      <span className="flex items-center gap-1">
+                        <Clock size={14} />
+                        {event.start_time.slice(0, 5)} - {event.end_time?.slice(0, 5) || '02:00'}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <MapPin size={16} />
-                      <span>Sunset Bar, Ouagadougou</span>
+                    
+                    <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
+                      <span className="flex items-center gap-1">
+                        <MapPin size={14} />
+                        Sunset Bar, Ouagadougou
+                      </span>
                     </div>
-                    <p className="text-gray-400 text-sm line-clamp-3">
-                      {event.description}
-                    </p>
-                  </CardContent>
-                  
-                  <CardFooter>
-                    <Link to={`/events/${event.id}`} className="w-full">
-                      <Button className="w-full sunset-gradient hover:opacity-90 text-white">
-                        Réserver ma place
-                      </Button>
+                    
+                    <h3 className="text-xl font-bold text-white mb-3">{event.title}</h3>
+                    <p className="text-gray-400 text-sm mb-4 line-clamp-2 flex-1">{event.description}</p>
+                    
+                    <Link
+                      to={`/events/${event.id}`}
+                      className="inline-flex items-center gap-2 text-[#F5A623] hover:text-[#FF6B35] font-medium transition-colors mt-auto"
+                    >
+                      Réserver ma place <ArrowRight size={16} />
                     </Link>
-                  </CardFooter>
-                </Card>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
