@@ -1,5 +1,7 @@
 import { supabase } from '../lib/supabase'
 import type { Event } from '../types/database'
+import { mockGallery } from '../mocks/data'
+import type { GalleryItem } from '../types/database'
 // CORRECTION : Importer depuis le bon chemin
 import { mockEvents } from '../mocks/data'
 
@@ -124,5 +126,26 @@ export const createReservation = async (
   } catch (error: any) {
     console.error('Error creating reservation:', error)
     return { success: false, error: error.message }
+  }
+}
+
+// Fetch gallery
+export const fetchGallery = async (): Promise<GalleryItem[]> => {
+  if (!isSupabaseConfigured()) {
+    console.log('📦 Using mock gallery')
+    return mockGallery
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('gallery_items')
+      .select('*')
+      .order('uploaded_at', { ascending: false })
+
+    if (error) throw error
+    return data as GalleryItem[]
+  } catch (error) {
+    console.error('Error fetching gallery:', error)
+    return mockGallery
   }
 }
