@@ -1,11 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key'
+// FORCER les valeurs pour tester
+const supabaseUrl = 'https://afxjjpylilnzfpjcrhfd.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmeGpqcHlsaWxuemZwamNyaGZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NTU5MjcsImV4cCI6MjA5MjMzMTkyN30.bl7JoEcn0M9NModZLv5le8YWJIOaojHCwmcZjJB5d7I'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// Vérification simple
-export const isSupabaseConfigured = (): boolean => {
-  return Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY)
-}
