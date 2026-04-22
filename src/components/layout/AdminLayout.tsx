@@ -35,7 +35,7 @@ const AdminLayout = () => {
   const handleLogout = async () => {
     await supabase.auth.signOut()
     toast.success('Déconnexion réussie')
-    navigate('/admin/login')
+    navigate('/')
   }
 
   const menuItems = [

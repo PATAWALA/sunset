@@ -12,6 +12,7 @@ import EventDetailsPage from './pages/public/EventDetailsPage'
 import GalleryPage from './pages/public/GalleryPage'
 import OurStoryPage from './pages/public/OurStoryPage'
 
+
 // Page de connexion secrète
 import SecretAdminLogin from './pages/auth/SecretAdminLogin'
 
