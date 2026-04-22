@@ -1,15 +1,17 @@
-import { supabase, isSupabaseConfigured } from '../lib/supabase'
-import type { Event, Reservation } from '../types/database'
+import { supabase } from '../lib/supabase'
+import type { Event } from '../types/database'
+// CORRECTION : Importer depuis le bon chemin
 import { mockEvents } from '../mocks/data'
 
-// ============================================
-// HELPERS POUR LES ÉVÉNEMENTS
-// ============================================
+// Vérifier si Supabase est configuré
+const isSupabaseConfigured = (): boolean => {
+  return Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY)
+}
 
+// Fetch all events
 export const fetchEvents = async (): Promise<Event[]> => {
-  // Si Supabase n'est pas configuré, retourner les mocks
   if (!isSupabaseConfigured()) {
-    console.log('📦 [MOCK] Fetching events...')
+    console.log('📦 Using mock data')
     return mockEvents
   }
 
@@ -27,12 +29,10 @@ export const fetchEvents = async (): Promise<Event[]> => {
   }
 }
 
+// Fetch upcoming events
 export const fetchUpcomingEvents = async (limit: number = 3): Promise<Event[]> => {
   if (!isSupabaseConfigured()) {
-    console.log('📦 [MOCK] Fetching upcoming events...')
-    return mockEvents
-      .filter(e => new Date(e.event_date) >= new Date())
-      .slice(0, limit)
+    return mockEvents.slice(0, limit)
   }
 
   try {
@@ -51,9 +51,9 @@ export const fetchUpcomingEvents = async (limit: number = 3): Promise<Event[]> =
   }
 }
 
+// Fetch featured event
 export const fetchFeaturedEvent = async (): Promise<Event | null> => {
   if (!isSupabaseConfigured()) {
-    console.log('📦 [MOCK] Fetching featured event...')
     return mockEvents.find(e => e.is_featured) || mockEvents[0]
   }
 
@@ -72,9 +72,9 @@ export const fetchFeaturedEvent = async (): Promise<Event | null> => {
   }
 }
 
+// Fetch event by ID
 export const fetchEventById = async (id: string): Promise<Event | null> => {
   if (!isSupabaseConfigured()) {
-    console.log(`📦 [MOCK] Fetching event ${id}...`)
     return mockEvents.find(e => e.id === id) || null
   }
 
@@ -93,10 +93,7 @@ export const fetchEventById = async (id: string): Promise<Event | null> => {
   }
 }
 
-// ============================================
-// HELPERS POUR LES RÉSERVATIONS
-// ============================================
-
+// Create reservation
 export const createReservation = async (
   eventId: string,
   reservation: {
@@ -109,7 +106,7 @@ export const createReservation = async (
   }
 ): Promise<{ success: boolean; error?: string }> => {
   if (!isSupabaseConfigured()) {
-    console.log('📦 [MOCK] Creating reservation...', reservation)
+    console.log('📦 Mock reservation:', reservation)
     return { success: true }
   }
 
@@ -127,54 +124,5 @@ export const createReservation = async (
   } catch (error: any) {
     console.error('Error creating reservation:', error)
     return { success: false, error: error.message }
-  }
-}
-
-export const fetchReservations = async (eventId?: string): Promise<Reservation[]> => {
-  if (!isSupabaseConfigured()) {
-    console.log('📦 [MOCK] Fetching reservations...')
-    return []
-  }
-
-  try {
-    let query = supabase.from('reservations').select('*')
-    
-    if (eventId) {
-      query = query.eq('event_id', eventId)
-    }
-
-    const { data, error } = await query.order('created_at', { ascending: false })
-
-    if (error) throw error
-    return data as Reservation[]
-  } catch (error) {
-    console.error('Error fetching reservations:', error)
-    return []
-  }
-}
-
-// ============================================
-// HELPERS POUR LA GALERIE
-// ============================================
-
-export const fetchGallery = async (): Promise<any[]> => {
-  const { mockGallery } = await import('../mocks/data')
-  
-  if (!isSupabaseConfigured()) {
-    console.log('📦 [MOCK] Fetching gallery...')
-    return mockGallery
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from('gallery_items')
-      .select('*')
-      .order('uploaded_at', { ascending: false })
-
-    if (error) throw error
-    return data
-  } catch (error) {
-    console.error('Error fetching gallery:', error)
-    return mockGallery
   }
 }
