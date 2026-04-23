@@ -10,7 +10,6 @@ import {
   Music,
   Sparkles,
   PartyPopper,
-  Send,
   CheckCircle,
   MessageCircle,
   Database
@@ -449,7 +448,7 @@ const EventDetailsPage = () => {
                   Besoin d'aide ? Appelez-nous
                 </p>
                 <a
-                  href="tel:+22600000000"
+                  href="tel:+22606114646"
                   className="inline-flex items-center justify-center gap-2 text-sunset-500 hover:text-sunset-400 text-xl font-medium transition"
                 >
                   <Phone size={20} /> +226 00 00 00 00
