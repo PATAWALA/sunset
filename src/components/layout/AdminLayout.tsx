@@ -1,20 +1,25 @@
-import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  Users, 
-  Image, 
-  LogOut,
+import { Outlet, Link, useLocation } from 'react-router-dom'
+import {
+  LayoutDashboard,
+  Calendar,
+  Users,
+  Image,
+  Home,
   Menu,
   X,
-  Home
+  ShoppingCart,
+  PartyPopper,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
@@ -26,72 +31,76 @@ const AdminLayout = () => {
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
-      toast.error('Veuillez vous connecter')
-      navigate('/admin/login')
+      toast.error('Session expirée, veuillez vous reconnecter')
+      navigate('/admin-secret-portal')
     }
     setIsLoading(false)
   }
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    toast.success('Déconnexion réussie')
-    navigate('/')
-  }
-
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
     { icon: Calendar, label: 'Événements', path: '/admin/events' },
     { icon: Users, label: 'Réservations', path: '/admin/reservations' },
+    { icon: ShoppingCart, label: 'Gestion des plats', path: '/admin/menu' },
     { icon: Image, label: 'Galerie', path: '/admin/gallery' },
   ]
 
+  const isActive = (path: string) => {
+    if (path === '/admin/dashboard' && location.pathname === '/admin') return true
+    return location.pathname.startsWith(path)
+  }
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center night-gradient">
-        <div className="w-12 h-12 border-4 border-sunset-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen night-gradient flex">
-      {/* Sidebar */}
-      <aside className={`
-        fixed md:relative z-50 h-full transition-all duration-300
-        ${isSidebarOpen ? 'w-64' : 'w-20'}
-        bg-night/95 backdrop-blur-md border-r border-white/10
-      `}>
+    <div className="min-h-screen flex bg-gray-50">
+      {/* Sidebar Desktop */}
+      <aside className={`hidden md:flex flex-col h-screen sticky top-0 bg-white border-r border-gray-200 shadow-sm transition-all duration-300 ${
+        isSidebarOpen ? 'w-64' : 'w-20'
+      }`}>
         {/* Logo */}
-        <div className="p-4 flex items-center justify-between">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
           {isSidebarOpen ? (
-            <Link to="/admin" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full sunset-gradient" />
-              <span className="font-bold text-white">Sunset Admin</span>
+            <Link to="/admin/dashboard" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                <PartyPopper size={16} className="text-white" />
+              </div>
+              <span className="font-display font-bold text-gray-900">Sunset Admin</span>
             </Link>
           ) : (
-            <div className="w-8 h-8 rounded-full sunset-gradient mx-auto" />
+            <Link to="/admin/dashboard" className="mx-auto">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                <PartyPopper size={16} className="text-white" />
+              </div>
+            </Link>
           )}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="text-white/60 hover:text-white hidden md:block"
+            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+            title={isSidebarOpen ? "Réduire la barre latérale" : "Agrandir la barre latérale"}
           >
-            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+            {isSidebarOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
           </button>
         </div>
 
         {/* Menu */}
-        <nav className="p-2 space-y-1">
+        <nav className="flex-1 py-4 px-2 space-y-1">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`
-                flex items-center gap-3 px-3 py-3 rounded-lg transition-all
-                ${location.pathname === item.path 
-                  ? 'bg-sunset-500 text-white' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-                }
-              `}
+              className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
+                isActive(item.path)
+                  ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+              }`}
+              title={!isSidebarOpen ? item.label : ''}
             >
               <item.icon size={20} />
               {isSidebarOpen && <span className="font-medium">{item.label}</span>}
@@ -99,27 +108,82 @@ const AdminLayout = () => {
           ))}
         </nav>
 
-        {/* Bottom actions */}
-        <div className="absolute bottom-0 left-0 right-0 p-2">
+        {/* Lien vers le site public */}
+        <div className="p-2 border-t border-gray-200">
           <Link
             to="/"
-            className="flex items-center gap-3 px-3 py-3 rounded-lg text-white/60 hover:bg-white/10 hover:text-white transition-all mb-2"
+            className={`flex items-center gap-3 px-3 py-3 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all ${
+              !isSidebarOpen && 'justify-center'
+            }`}
+            title={!isSidebarOpen ? 'Voir le site' : ''}
           >
             <Home size={20} />
             {isSidebarOpen && <span>Voir le site</span>}
           </Link>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all w-full"
-          >
-            <LogOut size={20} />
-            {isSidebarOpen && <span>Déconnexion</span>}
-          </button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-auto">
+      {/* Mobile Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <Link to="/admin/dashboard" className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+            <PartyPopper size={14} className="text-white" />
+          </div>
+          <span className="font-display font-bold text-gray-900">Sunset Admin</span>
+        </Link>
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+          title="Menu"
+        >
+          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <div
+            className="absolute left-0 top-0 h-full w-64 bg-white border-r border-gray-200 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="h-16 flex items-center px-6 border-b border-gray-200">
+              <span className="font-display font-bold text-gray-900 text-lg">Menu</span>
+            </div>
+            <nav className="py-4 px-3 space-y-1">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                    isActive(item.path)
+                      ? 'bg-amber-500 text-white'
+                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  }`}
+                >
+                  <item.icon size={20} />
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+              <Link
+                to="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              >
+                <Home size={20} />
+                <span>Voir le site</span>
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
+
+      {/* Contenu principal - FOND CLAIR */}
+      <main className="flex-1 pt-16 md:pt-0 bg-gray-50">
         <div className="p-4 md:p-8">
           <Outlet />
         </div>
