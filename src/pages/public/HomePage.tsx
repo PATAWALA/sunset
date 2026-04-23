@@ -167,22 +167,6 @@ const HomePage = () => {
               </Link>
             </div>
           </motion.div>
-
-          {/* Indicateurs d'images */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
-            {heroImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentImageIndex 
-                    ? 'bg-amber-400 w-6' 
-                    : 'bg-white/30 hover:bg-white/50'
-                }`}
-                title={`Image ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
       </section>
 
