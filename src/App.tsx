@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import ScrollToTop from './components/ScrollToTop'
 import MenuPage from './pages/public/MenuPage';
@@ -14,7 +14,6 @@ import ReserveMenuPage from './pages/public/ReserveMenuPage'
 import GalleryPage from './pages/public/GalleryPage'
 import OurStoryPage from './pages/public/OurStoryPage'
 
-
 // Page de connexion secrète
 import SecretAdminLogin from './pages/auth/SecretAdminLogin'
 
@@ -29,37 +28,41 @@ import AdminGalleryManager from './pages/admin/AdminGalleryManager'
 import ProtectedAdminRoute from './components/auth/ProtectedAdminRoute'
 
 function App() {
+  const location = useLocation()
+
   return (
-    <AnimatePresence mode="wait">
+    <>
       <ScrollToTop />
-      <Routes>
-        {/* Routes publiques */}
-        <Route path="/" element={<PublicLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="events" element={<EventsPage />} />
-          <Route path="/reserver-menu" element={<ReserveMenuPage />} />
-          <Route path="events/:id" element={<EventDetailsPage />} />
-          <Route path="/menu" element={<MenuPage />} />
-          <Route path="gallery" element={<GalleryPage />} />
-          <Route path="our-story" element={<OurStoryPage />} />
-        </Route>
-
-        {/* URL SECRÈTE pour la connexion admin */}
-        <Route path="/portal" element={<SecretAdminLogin />} />
-
-        {/* Routes admin PROTÉGÉES */}
-        <Route path="/admin" element={<ProtectedAdminRoute />}>
-          <Route element={<AdminLayout />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="events" element={<AdminEventsManager />} />
-            <Route path="menu" element={<AdminMenuManager />} />
-            <Route path="reservations" element={<AdminReservations />} />
-            <Route path="gallery" element={<AdminGalleryManager />} />
-            <Route index element={<AdminDashboard />} />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          {/* Routes publiques */}
+          <Route path="/" element={<PublicLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="events" element={<EventsPage />} />
+            <Route path="events/:id" element={<EventDetailsPage />} />
+            <Route path="reserver-menu" element={<ReserveMenuPage />} />
+            <Route path="menu" element={<MenuPage />} />
+            <Route path="gallery" element={<GalleryPage />} />
+            <Route path="our-story" element={<OurStoryPage />} />
           </Route>
-        </Route>
-      </Routes>
-    </AnimatePresence>
+
+          {/* URL SECRÈTE pour la connexion admin */}
+          <Route path="/portal" element={<SecretAdminLogin />} />
+
+          {/* Routes admin PROTÉGÉES */}
+          <Route path="/admin" element={<ProtectedAdminRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="events" element={<AdminEventsManager />} />
+              <Route path="menu" element={<AdminMenuManager />} />
+              <Route path="reservations" element={<AdminReservations />} />
+              <Route path="gallery" element={<AdminGalleryManager />} />
+              <Route index element={<AdminDashboard />} />
+            </Route>
+          </Route>
+        </Routes>
+      </AnimatePresence>
+    </>
   )
 }
 

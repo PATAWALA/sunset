@@ -3,138 +3,109 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 240 15% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 15% 8%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 15% 8%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 38 92% 55%;
-    --primary-foreground: 240 15% 4%;
-    --secondary: 15 100% 60%;
-    --secondary-foreground: 240 15% 4%;
-    --muted: 240 10% 15%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 347 70% 55%;
-    --accent-foreground: 240 15% 4%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 10% 20%;
-    --input: 240 10% 20%;
-    --ring: 38 92% 55%;
-    --radius: 1rem;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-night text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-cream-50 text-gray-800 font-body;
   }
-}
-
-@layer utilities {
-  .border-border {
-    border-color: hsl(var(--border));
+  
+  h1, h2, h3, h4 {
+    @apply font-display;
   }
 }
 
 @layer components {
-  /* ============================= */
-  /* DÉGRADÉS SUNSET (site visiteur) */
-  /* ============================= */
-  .sunset-gradient {
-    @apply bg-gradient-to-r from-[#F5A623] via-[#FF6B35] to-[#D9385E];
-  }
-  
-  .night-gradient {
-    @apply bg-gradient-to-b from-[#0F0F1A] to-[#1A1A2E];
-  }
-  
-  /* ============================= */
-  /* EFFETS GLASS (site visiteur)  */
-  /* ============================= */
-  .glass-effect {
-    @apply bg-[#1A1A2E]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
-  }
-  
-  .glass-card {
-    @apply bg-[#1A1A2E]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl hover:border-[#F5A623]/30 transition-all duration-300;
-  }
-  
-  /* ============================= */
-  /* PADDING DES SECTIONS          */
-  /* ============================= */
-  .section-padding {
-    @apply px-4 md:px-8 lg:px-16 py-16 md:py-24;
-  }
-  
-  /* ============================= */
-  /* BOUTONS SUNSET                */
-  /* ============================= */
+  /* Boutons signature L'Imprévu */
   .btn-primary {
-    @apply bg-gradient-to-r from-[#F5A623] to-[#FF6B35] text-white font-bold py-3 px-6 rounded-full hover:shadow-lg hover:shadow-[#F5A623]/30 transition-all duration-300 inline-flex items-center justify-center gap-2;
+    @apply bg-sage-400 hover:bg-sage-500 text-white font-medium 
+           py-2.5 px-6 rounded-full transition-all duration-300 
+           transform hover:scale-105 hover:shadow-lg;
   }
   
-  .btn-outline {
-    @apply border border-white/30 text-white font-bold py-3 px-6 rounded-full hover:bg-white/10 hover:border-[#F5A623] transition-all duration-300 inline-flex items-center justify-center gap-2;
+  .btn-secondary {
+    @apply bg-terracotta-400 hover:bg-terracotta-500 text-white 
+           font-medium py-2.5 px-6 rounded-full transition-all 
+           duration-300 transform hover:scale-105 hover:shadow-lg;
   }
   
-  /* ============================= */
-  /* BADGES                        */
-  /* ============================= */
-  .badge-featured {
-    @apply absolute top-4 left-4 px-3 py-1 bg-gradient-to-r from-[#F5A623] to-[#FF6B35] text-white text-xs font-bold rounded-full shadow-lg;
+  .btn-gold {
+    @apply bg-gold-400 hover:bg-gold-500 text-white font-medium 
+           py-2.5 px-6 rounded-full transition-all duration-300 
+           transform hover:scale-105 hover:shadow-lg;
   }
+  
+  /* Cartes avec effet de profondeur */
+  .card-elegant {
+    @apply bg-white border border-cream-200 rounded-2xl shadow-md 
+           hover:shadow-xl transition-all duration-300 
+           hover:-translate-y-1;
+  }
+  
+  /* Texte gradient pour les titres spéciaux */
+  .text-gradient-gourmet {
+    @apply bg-gradient-to-r from-sage-600 to-terracotta-500 
+           bg-clip-text text-transparent;
+  }
+}
 
-  /* ============================= */
-  /* CLASSES UTILITAIRES ADMIN     */
-  /* ============================= */
-  .admin-card {
-    @apply bg-white rounded-2xl border border-gray-200 shadow-sm;
+/* Animations personnalisées */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  .admin-btn-primary {
-    @apply inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-full font-medium text-sm transition shadow-sm;
-  }
+@keyframes subtlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
 
-  .admin-btn-success {
-    @apply px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition shadow-sm;
-  }
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
 
-  .admin-btn-danger {
-    @apply px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition shadow-sm;
-  }
+.animate-subtle-pulse {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
 
-  .admin-input {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition;
-  }
+/* Scrollbar élégante */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-  .admin-badge {
-    @apply px-3 py-1 rounded-full text-xs font-medium;
-  }
+::-webkit-scrollbar-track {
+  background: #fdf7ef;
+}
 
-  .admin-badge-success {
-    @apply bg-emerald-100 text-emerald-700;
-  }
+::-webkit-scrollbar-thumb {
+  background: #c7d9c1;
+  border-radius: 4px;
+}
 
-  .admin-badge-danger {
-    @apply bg-red-100 text-red-700;
+::-webkit-scrollbar-thumb:hover {
+  background: #80a573;
+}
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-  .admin-badge-warning {
-    @apply bg-amber-100 text-amber-700;
-  }
+@keyframes subtlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
 
-  .admin-badge-info {
-    @apply bg-blue-100 text-blue-700;
-  }
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
 
-  .admin-badge-purple {
-    @apply bg-purple-100 text-purple-700;
-  }
+.animate-subtle-pulse {
+  animation: subtlePulse 3s ease-in-out infinite;
 }
