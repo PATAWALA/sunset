@@ -1,21 +1,16 @@
-import type { Config } from "tailwindcss";
-
+/** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./app/**/*.{js,jsx,ts,tsx,mdx}",
-    "./pages/**/*.{js,jsx,ts,tsx,mdx}",
-    "./components/**/*.{js,jsx,ts,tsx,mdx}",
-    "./src/**/*.{js,jsx,ts,tsx,mdx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
     "./index.html",
   ],
   theme: {
     extend: {
       colors: {
-        // Palette L'Imprévu - Restaurant Bénin
         sage: {
           50: '#f4f7f2',
           100: '#e3ebe0',
-          200: '#c7d9c1', 
+          200: '#c7d9c1',
           300: '#a3bf9a',
           400: '#80a573',
           500: '#5c8a4f',
@@ -65,4 +60,4 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config;
+};
