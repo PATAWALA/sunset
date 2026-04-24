@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { 
   Calendar, 
@@ -113,23 +113,27 @@ const HomePage = () => {
   return (
     <div className="bg-cream-50">
       {/* ============================ */}
-      {/* HERO SECTION - Pleine hauteur, collé au header */}
+      {/* HERO SECTION */}
       {/* ============================ */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden -mt-[120px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentImageIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImages[currentImageIndex]})` }}
-          />
-        </AnimatePresence>
+      <section className="relative h-screen flex items-center justify-center overflow-hidden -mt-[120px] bg-sage-900">
+        {/* Images avec fondu croisé - pas de flash blanc */}
+        <div className="absolute inset-0">
+          {heroImages.map((img, index) => (
+            <motion.div
+              key={img}
+              initial={false}
+              animate={{ 
+                opacity: index === currentImageIndex ? 1 : 0,
+              }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${img})` }}
+            />
+          ))}
+        </div>
         
-        {/* Overlay simple et propre - juste assez sombre pour le texte blanc */}
-        <div className="absolute inset-0 bg-black/40" />
+        {/* Overlay sombre pour texte ultra lisible */}
+        <div className="absolute inset-0 bg-black/55" />
 
         <div className="relative z-10 container mx-auto px-4 text-center text-white pt-[120px]">
           <motion.div
@@ -137,27 +141,27 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="inline-block px-6 py-2 bg-black/40 backdrop-blur-sm border border-white/30 text-white text-sm font-semibold uppercase tracking-wider rounded-full mb-6">
+            <span className="inline-block px-6 py-2 bg-white/15 backdrop-blur-sm border border-white/25 text-white text-sm font-semibold uppercase tracking-wider rounded-full mb-6">
               ✨ {featuredEvent ? featuredEvent.title : 'Bistrot & Guesthouse'}
             </span>
             
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 leading-tight drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 leading-tight drop-shadow-2xl">
               L'Imprévu
               <br />
-              <span className="text-3xl md:text-4xl lg:text-5xl text-gold-300">L'art de recevoir</span>
+              <span className="text-3xl md:text-4xl lg:text-5xl text-gold-300 drop-shadow-lg">L'art de recevoir</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
+            <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto leading-relaxed drop-shadow-xl">
               Café, bistrot & guesthouse au cœur de Cotonou.
               <br />
               <span className="text-gold-300 font-medium">Une cuisine authentique, un accueil chaleureux.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/events" className="bg-sage-600 hover:bg-sage-700 text-white text-lg px-8 py-4 rounded-full inline-flex items-center justify-center gap-2 font-semibold shadow-lg transition-all">
+              <Link to="/events" className="bg-sage-600 hover:bg-sage-700 text-white text-lg px-8 py-4 rounded-full inline-flex items-center justify-center gap-2 font-semibold shadow-xl transition-all hover:scale-105">
                 Je réserve ma table <ArrowRight size={20} />
               </Link>
-              <Link to="/menu" className="bg-white/20 backdrop-blur-sm border-2 border-white/60 text-white hover:bg-white/30 hover:border-white text-lg px-8 py-4 rounded-full inline-flex items-center justify-center gap-2 font-semibold transition-all">
+              <Link to="/menu" className="bg-white/20 backdrop-blur-sm border-2 border-white/50 text-white hover:bg-white/30 hover:border-white text-lg px-8 py-4 rounded-full inline-flex items-center justify-center gap-2 font-semibold transition-all">
                 Notre menu
               </Link>
             </div>
