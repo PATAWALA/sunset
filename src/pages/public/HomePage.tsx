@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { 
   Calendar, 
@@ -27,7 +27,6 @@ type MenuItem = {
   tags: string[] | null
 }
 
-// 3 images de fond pour le Hero
 const heroImages = [
   'https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=1920',
   'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920',
@@ -41,7 +40,6 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  // Défilement des images du Hero
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % heroImages.length)
@@ -49,7 +47,6 @@ const HomePage = () => {
     return () => clearInterval(interval)
   }, [])
 
-  // Chargement des données
   useEffect(() => {
     const loadAll = async () => {
       setIsLoading(true)
@@ -116,24 +113,27 @@ const HomePage = () => {
   return (
     <div className="bg-night min-h-screen">
       {/* ============================ */}
-      {/* HERO SECTION - 3 images défilantes */}
+      {/* HERO SECTION */}
       {/* ============================ */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Images de fond avec fondu */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentImageIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImages[currentImageIndex]})` }}
-          />
-        </AnimatePresence>
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-night">
+        {/* Images superposées avec fondu croisé - PAS de AnimatePresence mode="wait" */}
+        <div className="absolute inset-0">
+          {heroImages.map((img, index) => (
+            <motion.div
+              key={img}
+              initial={false}
+              animate={{ 
+                opacity: index === currentImageIndex ? 1 : 0,
+              }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${img})` }}
+            />
+          ))}
+        </div>
         
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-night" />
+        {/* Overlay LÉGER - on passe de 70% à 40% */}
+        <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
           <motion.div
@@ -141,18 +141,17 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Badge */}
-            <span className="inline-block px-6 py-2 bg-sunset-500/20 backdrop-blur-sm border border-sunset-500/50 text-sunset-300 text-sm font-bold uppercase tracking-wider rounded-full mb-6">
+            <span className="inline-block px-6 py-2 bg-black/30 backdrop-blur-sm border border-white/20 text-white text-sm font-bold uppercase tracking-wider rounded-full mb-6">
               🔥 {featuredEvent ? featuredEvent.title : 'Le Lancé du Jour'}
             </span>
             
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 leading-tight drop-shadow-lg">
               <span className="sunset-gradient bg-clip-text text-transparent">Sunset</span>
               <br />
               <span className="text-white">Là où la nuit prend vie</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
               Bien plus qu'un bar. Un voyage sensoriel au-dessus de Ouagadougou.
               <br />
               <span className="text-amber-400 font-medium">Venez, vibrez, savourez.</span>
@@ -167,6 +166,21 @@ const HomePage = () => {
               </Link>
             </div>
           </motion.div>
+        </div>
+
+        {/* Dots de navigation */}
+        <div className="absolute bottom-8 left-0 right-0 z-10 flex justify-center gap-3">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                index === currentImageIndex 
+                  ? 'bg-amber-400 scale-125' 
+                  : 'bg-white/50 hover:bg-white/80'
+              }`}
+            />
+          ))}
         </div>
       </section>
 
